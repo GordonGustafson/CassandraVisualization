@@ -5,8 +5,6 @@ var Node = function(id, initialToken) {
 };
 
 Node.prototype.updateUI = function() {
-    // user-interface.js assumes that these field
-    // names match the class names in index.html
     nodeData = {
         id: this.id,
         initialToken: this.initialToken,
