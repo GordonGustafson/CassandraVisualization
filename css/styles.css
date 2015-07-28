@@ -1,0 +1,24 @@
+html { 
+    height: 100%;
+}
+body { 
+    min-height: 100%;
+}
+
+.left-column { float: left; width: 33.33%; }
+.right-column { float: right; width: 33.33%; }
+.center-column { display: inline-block; width: 33.33%; }
+
+.node {
+    height: 100%
+}
+
+#node1 {
+    background-color: #fbb
+}
+#node2 {
+    background-color: #bfb
+}
+#node3 {
+    background-color: #bbf
+}
