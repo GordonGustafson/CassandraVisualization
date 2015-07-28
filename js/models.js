@@ -1,13 +1,13 @@
-var Node = function(id, initialToken) {
+var Node = function(id, token) {
     this.id = id;
-    this.initialToken = initialToken;
+    this.token = token;
     this.data = {};
 };
 
 Node.prototype.updateUI = function() {
     nodeData = {
         id: this.id,
-        initialToken: this.initialToken,
+        token: this.token,
         data: JSON.stringify(this.data)
     };
 
@@ -17,8 +17,8 @@ Node.prototype.updateUI = function() {
 var Cluster = function(numberOfNodes) {
     this.nodeList = [];
     for (var x = 0; x < numberOfNodes; x++) {
-        var initialToken = Math.floor(x * MAX_HASH / numberOfNodes);
-        this.nodeList.push(new Node(x, initialToken));
+        var token = Math.floor(x * MAX_HASH / numberOfNodes);
+        this.nodeList.push(new Node(x, token));
     }
 
     this.updateUI();
