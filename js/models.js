@@ -13,3 +13,19 @@ Node.prototype.updateUI = function() {
 
     updateNodeDisplay(nodeData);
 };
+// To keep things simple, a Cluster can only contain one table.
+var Cluster = function(numberOfNodes) {
+    this.nodeList = [];
+    for (var x = 0; x < numberOfNodes; x++) {
+        var initialToken = Math.floor(x * MAX_HASH / numberOfNodes);
+        this.nodeList.push(new Node(x, initialToken));
+    }
+
+    this.updateUI();
+};
+
+
+Cluster.prototype.updateUI = function() {
+    this.nodeList.forEach(function (node) { node.updateUI(); });
+};
+
