@@ -9,6 +9,8 @@ body {
 .right-column { float: right; width: 33.33%; }
 .center-column { display: inline-block; width: 33.33%; }
 
+.new-line { clear:left }
+
 .node {
     height: 100%
 }
@@ -21,4 +23,13 @@ body {
 }
 #node2 {
     background-color: #bbf
+}
+#node3 {
+    background-color: #bff
+}
+#node4 {
+    background-color: #fbf
+}
+#node5 {
+    background-color: #ffb
 }
