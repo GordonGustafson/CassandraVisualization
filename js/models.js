@@ -4,6 +4,7 @@ var Node = function(id, token) {
     this.isAvailable = true;
     this.data = {};
 
+    createNode(id);
     this.updateUI();
 };
 

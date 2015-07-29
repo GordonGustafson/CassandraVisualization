@@ -1,3 +1,7 @@
+function createNode(nodeID) {
+    $("#node-container").append('<div id="node' + nodeID + '" class="node"><table></table></div>');
+}
+
 function updateNodeDisplay(nodeData) {
     var nodeSelector = "#node" + nodeData.id;
     $(nodeSelector + " table").empty();    // clear the existing table

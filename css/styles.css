@@ -1,19 +1,7 @@
-html { 
-    height: 100%;
-}
-body { 
-    min-height: 100%;
-}
-
-/* 32.5% leaves room for borders */
-.left-column { float: left; width: 32.5%; }
-.right-column { float: right; width: 32.5%; }
-.center-column { display: inline-block; width: 32.5%; }
-
-.new-line { clear:left; }
-
 .node {
-    height: 100%;
+    display: inline-block;
+    min-height: 100px;
+    width: 410px;
     /* If we don't add any border now the elements
        will move around when we add one later */
     border-width: 5px;
@@ -21,24 +9,24 @@ body {
     border-color: white;
 }
 
-#node0 {
-    background-color: #fbb;
-}
-#node1 {
-    background-color: #bfb;
-}
-#node2 {
-    background-color: #bbf;
-}
-#node3 {
-    background-color: #bff;
-}
-#node4 {
-    background-color: #fbf;
-}
-#node5 {
-    background-color: #ffb;
-}
+#node0  { background-color: #f99; }
+#node1  { background-color: #9f9; }
+#node2  { background-color: #99f; }
+#node3  { background-color: #9ff; }
+#node4  { background-color: #f9f; }
+#node5  { background-color: #ff9; }
+#node6  { background-color: #fcc; }
+#node7  { background-color: #cfc; }
+#node8  { background-color: #ccf; }
+#node9  { background-color: #cff; }
+#node10 { background-color: #fcf; }
+#node11 { background-color: #ffc; }
+#node12 { background-color: #f55; }
+#node13 { background-color: #5f5; }
+#node14 { background-color: #55f; }
+#node15 { background-color: #5ff; }
+#node16 { background-color: #f5f; }
+#node17 { background-color: #ff5; }
 
 .being-read {
     border-color: green;
