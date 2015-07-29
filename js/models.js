@@ -1,7 +1,10 @@
 var Node = function(id, token) {
     this.id = id;
     this.token = token;
+    this.isAvailable = true;
     this.data = {};
+
+    this.updateUI();
 };
 
 Node.prototype.updateUI = function() {
@@ -22,6 +25,7 @@ Node.prototype.read = function(key) {
 Node.prototype.write = function(key, value) {
     displayWrite(this.id);
     this.data[key] = value;
+    this.updateUI();
 };
 
 
@@ -58,18 +62,12 @@ var Cluster = function(numberOfNodes, replicationFactor) {
 
     // Since we created the nodes in sorted order this is unnecessary:
     this.sortNodeListByToken();
-
-    this.updateUI();
 };
 
 Cluster.prototype.sortNodeListByToken = function() {
     this.nodes.sort(function(left, right) {
         return left.token - right.token;
     });
-};
-
-Cluster.prototype.updateUI = function() {
-    this.nodes.forEach(function (node) { node.updateUI(); });
 };
 
 Cluster.prototype.getIndexOfPrimaryNodeForKeyHash = function(keyHash) {
@@ -116,7 +114,6 @@ Cluster.prototype.insert = function(key, value, consistencyLevel) {
     clearReadWriteClasses();
     var nodesToWriteTo = this.getNodesToSatisfyConsistencyLevel(key, consistencyLevel);
     nodesToWriteTo.forEach(function(node) { node.write(key, value); });
-    this.updateUI();
 };
 
 Cluster.prototype.select = function(key, consistencyLevel) {
