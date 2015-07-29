@@ -23,8 +23,15 @@ function displayWrite(nodeID) {
     $(nodeSelector).addClass("being-written");
 }
 
-function clearReadWriteClasses() {
-    $(".node").removeClass("being-read").removeClass("being-written");
+function displayCoordinator(nodeID) {
+    var nodeSelector = "#node" + nodeID;
+    $(nodeSelector).addClass("coordinating");
+}
+
+function clearReadWriteCoordinatorClasses() {
+    $(".node").removeClass("being-read")
+        .removeClass("being-written")
+        .removeClass("coordinating");
 }
 
 
@@ -36,4 +43,16 @@ function displayDecommissioned(nodeID) {
 function displayRecommissioned(nodeID) {
     var nodeSelector = "#node" + nodeID;
     $(nodeSelector).removeClass("decommissioned");
+}
+
+
+function getScreenDistance(nodeOneID, nodeTwoID) {
+    var nodeOneSelector = "#node" + nodeOneID;
+    var nodeTwoSelector = "#node" + nodeTwoID;
+    var nodeOneOffset = $(nodeOneSelector).offset();
+    var nodeTwoOffset = $(nodeTwoSelector).offset();
+    var distanceAsFloat =
+        Math.sqrt(Math.pow(nodeOneOffset.left - nodeTwoOffset.left, 2) +
+                  Math.pow(nodeOneOffset.top  - nodeTwoOffset.top,  2));
+    return Math.ceil(distanceAsFloat);
 }

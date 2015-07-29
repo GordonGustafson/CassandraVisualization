@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var cluster = new Cluster(18, 3);
+    var cluster = new Cluster(6, 3);
     cluster.getNode(1).decommission();
     cluster.insert("harry potter", "human", ConsistencyLevel.QUORUM);
     cluster.getNode(1).recommission();

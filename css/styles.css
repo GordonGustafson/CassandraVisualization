@@ -36,6 +36,15 @@
     border-color: red;
 }
 
+.coordinating {
+    font-weight: bold;
+}
+
+/* don't change the border for decommissioned nodes */
+.decommissioned.being-read, .decommissioned.being-written {
+    border-color: white;
+}
+
 /* Using #node-container is a hack to override other id selectors */
 #node-container .decommissioned {
     background-color: grey;
