@@ -33,9 +33,9 @@ Node.prototype.read = function(key) {
     return (this.data.hasOwnProperty(key)) ? this.data[key] : null;
 };
 
-Node.prototype.write = function(key, value) {
+Node.prototype.write = function(key, value, timestamp) {
     displayWrite(this.id);
-    this.data[key] = value;
+    this.data[key] = [value, timestamp];
     this.updateUI();
 };
 
@@ -70,6 +70,7 @@ var Cluster = function(numberOfNodes, replicationFactor) {
         this.nodes.push(new Node(x, token));
     }
     this.replicationFactor = replicationFactor;
+    this.currentTime = 0;
 
     // Since we created the nodes in sorted order this is unnecessary:
     this.sortNodeListByToken();
@@ -111,7 +112,6 @@ Cluster.prototype.getPrimaryNodeForKeyHash = function(keyHash) {
 };
 
 Cluster.prototype.getNodesForKeyHash = function(keyHash) {
-    // TODO: see if there's a better way to do this while avoiding 'this' issues
     var nodes = this.nodes;
     var primaryNodeIndex = this.getIndexOfPrimaryNodeForKeyHash(keyHash);
     var rawNodeIndicesForKeyHash = _.range(primaryNodeIndex, primaryNodeIndex + this.replicationFactor);
@@ -138,12 +138,23 @@ Cluster.prototype.getNodesToSatisfyConsistencyLevel = function(key, consistencyL
 
 Cluster.prototype.insert = function(key, value, consistencyLevel) {
     clearReadWriteClasses();
+    var currentTime = this.currentTime;
     var nodesToWriteTo = this.getNodesToSatisfyConsistencyLevel(key, consistencyLevel);
-    nodesToWriteTo.forEach(function(node) { node.write(key, value); });
+    nodesToWriteTo.forEach(function(node) { node.write(key, value, currentTime); });
+    this.currentTime++;
 };
 
 Cluster.prototype.select = function(key, consistencyLevel) {
     clearReadWriteClasses();
     var nodesToReadFrom = this.getNodesToSatisfyConsistencyLevel(key, consistencyLevel);
-    return nodesToReadFrom.map(function(node) { return node.read(key); });
+    var results = nodesToReadFrom.map(function(node) { return node.read(key); });
+    results.sort(function(left, right) {
+        leftTimestamp = left[1];
+        rightTimestamp = right[1];
+        // a negative number means that left comes before right in the final
+        // sorted list. We do left - right to sort in ascending order.
+        return leftTimestamp - rightTimestamp;
+    });
+    var latestValueTimestampPair = results[results.length - 1];
+    return latestValueTimestampPair[0];   // return only the value (no timestamp)
 };
