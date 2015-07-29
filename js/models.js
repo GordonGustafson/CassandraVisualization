@@ -17,6 +17,16 @@ Node.prototype.updateUI = function() {
     updateNodeDisplay(nodeData);
 };
 
+Node.prototype.decommission = function() {
+    this.isAvailable = false;
+    displayDecommissioned(this.id);
+};
+
+Node.prototype.recommission = function() {
+    this.isAvailable = true;
+    displayRecommissioned(this.id);
+};
+
 Node.prototype.read = function(key) {
     displayRead(this.id);
     return (this.data.hasOwnProperty(key)) ? this.data[key] : null;
@@ -64,6 +74,10 @@ var Cluster = function(numberOfNodes, replicationFactor) {
     this.sortNodeListByToken();
 };
 
+Cluster.prototype.getNode = function(nodeID) {
+    return this.nodes.filter(function(node) { return node.id === nodeID; })[0];
+};
+
 Cluster.prototype.sortNodeListByToken = function() {
     this.nodes.sort(function(left, right) {
         return left.token - right.token;
@@ -104,10 +118,21 @@ Cluster.prototype.getNodesForKeyHash = function(keyHash) {
     return nodeIndicesForKeyHash.map(function (index) { return nodes[index]; });
 };
 
+Cluster.prototype.getAvailableNodesWithData = function(key) {
+    var nodesWithData = this.getNodesForKeyHash(hashString(key));
+    return nodesWithData.filter(function(node) { return node.isAvailable; });
+};
+
+// Returns a list of available nodes that will satisfy consistencyLevel if all
+// of them are succesfully queried. Throws an exception If there are not enough
+// available nodes to satisfy the consistency level.
 Cluster.prototype.getNodesToSatisfyConsistencyLevel = function(key, consistencyLevel) {
     var numberOfNodesRequired = numberOfNodestoSatisfyConsistencyLevel(consistencyLevel, this.replicationFactor);
-    var nodesWithData = this.getNodesForKeyHash(hashString(key));
-    return nodesWithData.slice(0, numberOfNodesRequired); // Get first numberOfNodesRequired elements
+    var availableNodesWithData = this.getAvailableNodesWithData(key);
+    if (availableNodesWithData.length < numberOfNodesRequired) {
+        throw "Not enough nodes available to satisfy consistency level " + consistencyLevel;
+    }
+    return availableNodesWithData.slice(0, numberOfNodesRequired); // Get first numberOfNodesRequired elements
 };
 
 Cluster.prototype.insert = function(key, value, consistencyLevel) {

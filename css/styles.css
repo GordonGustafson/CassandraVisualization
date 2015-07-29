@@ -47,3 +47,8 @@ body {
 .being-written {
     border-color: red;
 }
+
+/* Using #node-container is a hack to override other id selectors */
+#node-container .decommissioned {
+    background-color: grey;
+}

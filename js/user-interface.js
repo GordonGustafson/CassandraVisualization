@@ -22,3 +22,14 @@ function displayWrite(nodeID) {
 function clearReadWriteClasses() {
     $(".node").removeClass("being-read").removeClass("being-written");
 }
+
+
+function displayDecommissioned(nodeID) {
+    var nodeSelector = "#node" + nodeID;
+    $(nodeSelector).addClass("decommissioned");
+}
+
+function displayRecommissioned(nodeID) {
+    var nodeSelector = "#node" + nodeID;
+    $(nodeSelector).removeClass("decommissioned");
+}
