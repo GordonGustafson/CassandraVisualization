@@ -8,3 +8,17 @@ function updateNodeDisplay(nodeData) {
         $(nodeSelector + " table").append("<tr><td>" + key + ":</td><td>" + value + "</td></tr>");
     }
 }
+
+function displayRead(nodeID) {
+    var nodeSelector = "#node" + nodeID;
+    $(nodeSelector).addClass("being-read");
+}
+
+function displayWrite(nodeID) {
+    var nodeSelector = "#node" + nodeID;
+    $(nodeSelector).addClass("being-written");
+}
+
+function clearReadWriteClasses() {
+    $(".node").removeClass("being-read").removeClass("being-written");
+}

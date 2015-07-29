@@ -5,31 +5,45 @@ body {
     min-height: 100%;
 }
 
-.left-column { float: left; width: 33.33%; }
-.right-column { float: right; width: 33.33%; }
-.center-column { display: inline-block; width: 33.33%; }
+/* 32.5% leaves room for borders */
+.left-column { float: left; width: 32.5%; }
+.right-column { float: right; width: 32.5%; }
+.center-column { display: inline-block; width: 32.5%; }
 
-.new-line { clear:left }
+.new-line { clear:left; }
 
 .node {
-    height: 100%
+    height: 100%;
+    /* If we don't add any border now the elements
+       will move around when we add one later */
+    border-width: 5px;
+    border-style: solid;
+    border-color: white;
 }
 
 #node0 {
-    background-color: #fbb
+    background-color: #fbb;
 }
 #node1 {
-    background-color: #bfb
+    background-color: #bfb;
 }
 #node2 {
-    background-color: #bbf
+    background-color: #bbf;
 }
 #node3 {
-    background-color: #bff
+    background-color: #bff;
 }
 #node4 {
-    background-color: #fbf
+    background-color: #fbf;
 }
 #node5 {
-    background-color: #ffb
+    background-color: #ffb;
+}
+
+.being-read {
+    border-color: green;
+}
+
+.being-written {
+    border-color: red;
 }

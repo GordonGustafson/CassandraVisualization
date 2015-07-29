@@ -1,7 +1,6 @@
 $(document).ready(function () {
     var cluster = new Cluster(6, 3);
-    var key = "gordon.gustafson";
-    var keyHash = hashString(key);
-    console.log(keyHash);
-    console.log(cluster.getNodesForKeyHash(keyHash));
+    cluster.insert("my_key", "my_value", ConsistencyLevel.ALL);
+    console.log( cluster.select("my_key", ConsistencyLevel.ONE) );
+
 });

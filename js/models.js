@@ -13,6 +13,40 @@ Node.prototype.updateUI = function() {
 
     updateNodeDisplay(nodeData);
 };
+
+Node.prototype.read = function(key) {
+    displayRead(this.id);
+    return (this.data.hasOwnProperty(key)) ? this.data[key] : null;
+};
+
+Node.prototype.write = function(key, value) {
+    displayWrite(this.id);
+    return this.data[key] = value;
+};
+
+
+
+ConsistencyLevel = {
+    ONE : "ONE",
+    TWO : "TWO",
+    THREE : "THREE",
+    QUORUM : "QUORUM",
+    ALL : "ALL"
+}
+
+// TODO: Consider making this a private method of Cluster
+function numberOfNodestoSatisfyConsistencyLevel(consistencyLevel, replicationFactor) {
+    if (consistencyLevel == ConsistencyLevel.ONE)    { return 1; }
+    if (consistencyLevel == ConsistencyLevel.TWO)    { return 2; }
+    if (consistencyLevel == ConsistencyLevel.THREE)  { return 3; }
+    if (consistencyLevel == ConsistencyLevel.QUORUM) { return Math.ceil(replicationFactor / 2); }
+    if (consistencyLevel == ConsistencyLevel.ALL)    { return replicationFactor; }
+    alert("Reached unreachable code in numberOfNodestoSatisfyConsistencyLevel with arguments " +
+         consistencylevel + " " + replicationFactor);
+}
+
+
+
 // To keep things simple, a Cluster can only contain one table.
 var Cluster = function(numberOfNodes, replicationFactor) {
     this.nodeList = [];
@@ -71,3 +105,22 @@ Cluster.prototype.getNodesForKeyHash = function(keyHash) {
     var nodeIndicesForKeyHash = rawNodeIndicesForKeyHash.map(function (index) { return index % nodeList.length; });
     return nodeIndicesForKeyHash.map(function (index) { return nodeList[index]; });
 };
+
+Cluster.prototype.getNodesToSatisfyConsistencyLevel = function(key, consistencyLevel) {
+    var numberOfNodesRequired = numberOfNodestoSatisfyConsistencyLevel(consistencyLevel, this.replicationFactor);
+    var nodesWithData = this.getNodesForKeyHash(hashString(key));
+    return nodesWithData.slice(0, numberOfNodesRequired); // Get first numberOfNodesRequired elements
+}
+
+Cluster.prototype.insert = function(key, value, consistencyLevel) {
+    clearReadWriteClasses();
+    var nodesToWriteTo = this.getNodesToSatisfyConsistencyLevel(key, consistencyLevel);
+    nodesToWriteTo.forEach(function(node) { node.write(key, value); });
+    this.updateUI();
+}
+
+Cluster.prototype.select = function(key, consistencyLevel) {
+    clearReadWriteClasses();
+    var nodesToReadFrom = this.getNodesToSatisfyConsistencyLevel(key, consistencyLevel);
+    return nodesToReadFrom.map(function(node) { return node.read(key); });
+}
