@@ -107,7 +107,12 @@ Node.prototype.coordinateWrite = function(key, value, nodesWithData, consistency
     displayCoordinator(this.id);
     var numberOfNodesToWriteTo =
         numberOfNodestoSatisfyConsistencyLevel(consistencyLevel, nodesWithData.length);
-    var writePromises = nodesWithData.map(function(node) {
+    var availableNodesWithData = nodesWithData.filter(function(node) { return node.isAvailable; });
+    if (availableNodesWithData.length < numberOfNodesToWriteTo) {
+        console.log("Not enough available nodes to write " + key + ": " + value + " at consistency level " + consistencyLevel);
+        return;
+    }
+    var writePromises = availableNodesWithData.map(function(node) {
         // We use the on-screen distance between two nodes to determine
         // how long it takes one to read/write to the other
         var timeUntilResolution = getScreenDistance(this.id, node.id);
