@@ -1,5 +1,7 @@
 function createNode(nodeID) {
     $("#node-container").append('<div id="node' + nodeID + '" class="node"><table></table></div>');
+    var nodeSelector = "#node" + nodeID;
+    $(nodeSelector).draggable();
 }
 
 function updateNodeDisplay(nodeData) {
