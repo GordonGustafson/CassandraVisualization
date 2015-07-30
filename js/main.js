@@ -1,6 +1,10 @@
 var cluster;
 
 $(document).ready(function () {
+    $(document).click(function() {
+        cluster.scheduler.runNextScheduledEvent();
+    });
+
     cluster = new Cluster(6, 3);
     cluster.getNode(1).decommission();
     cluster.insert("harry potter", "human", ConsistencyLevel.QUORUM);
