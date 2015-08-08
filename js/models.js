@@ -235,12 +235,18 @@ Cluster.prototype.getNodesForKey = function(key) {
 };
 
 Cluster.prototype.insert = function(key, value, consistencyLevel) {
+    if (typeof consistencyLevel === "undefined") {
+        consistencyLevel = "ONE";
+    }
     clearReadWriteCoordinatorClasses();
     var coordinator = this.getNextCoordinator();
     coordinator.coordinateWrite(key, value, this.getNodesForKey(key), consistencyLevel);
 };
 
 Cluster.prototype.select = function(key, consistencyLevel) {
+    if (typeof consistencyLevel === "undefined") {
+        consistencyLevel = "ONE";
+    }
     clearReadWriteCoordinatorClasses();
     var coordinator = this.getNextCoordinator();
     coordinator.coordinateRead(key, this.getNodesForKey(key), consistencyLevel);
